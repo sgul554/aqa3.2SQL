@@ -8,13 +8,11 @@ import ru.netology.web.data.DataHelper;
 import ru.netology.web.page.LoginPage;
 import ru.netology.web.sqlUtils.SqlUtils;
 
-import java.sql.SQLException;
 
 import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MoneyTransferTest {
-    SqlUtils mySql = new SqlUtils();
 
     @BeforeEach
     void setUp() {
@@ -22,7 +20,7 @@ public class MoneyTransferTest {
     }
 
     @Test
-    void shouldCheckLogin() throws SQLException {
+    void shouldCheckLogin(){
         val loginPage = new LoginPage();
         val authInfo = DataHelper.getAuthInfo();
         val verificationPage = loginPage.validLogin(authInfo);
@@ -32,7 +30,7 @@ public class MoneyTransferTest {
     }
 
     @Test
-    void shouldBlockedAfterThreeInvalidPassword() throws SQLException {
+    void shouldBlockedAfterThreeInvalidPassword(){
         val loginPage = new LoginPage();
         val authInfo = DataHelper.getOtherAuthInfo();
         loginPage.validLogin(authInfo);
@@ -40,12 +38,12 @@ public class MoneyTransferTest {
         loginPage.validLogin(authInfo);
         loginPage.cleanLoginFields();
         loginPage.validLogin(authInfo);
-        val statusSQL = mySql.getStatusFromDb(authInfo.getLogin());
+        val statusSQL = SqlUtils.getStatusFromDb(authInfo.getLogin());
         assertEquals("blocked", statusSQL);
     }
 
     @AfterAll
-    static void close() throws SQLException {
+    static void close(){
         SqlUtils.cleanDb();
     }
 
